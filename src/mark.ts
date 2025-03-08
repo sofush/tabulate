@@ -27,6 +27,14 @@ export class Mark {
         this.relativePath = util.uriToRelative(uri);
     }
 
+    public getGlobPattern() {
+        return `*/${this.relativePath}`;
+    }
+
+    public getLabelContent() {
+        return `${this.superscriptNumber()} ${path.win32.basename(this.uri.fsPath)}`;
+    }
+
     public superscriptNumber() {
         let n = this.num;
         let out = '';

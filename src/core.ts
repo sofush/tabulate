@@ -1,29 +1,32 @@
 import { workspace, ConfigurationTarget } from 'vscode';
 import { State } from './state';
+import * as util from './util';
 import * as vscode from 'vscode';
-import * as path from 'path';
 
-export async function update(state?: State | undefined) {
+export async function update(state: State) {
     const configuration = workspace.getConfiguration();
 
-    if (state === undefined) {
-        return await configuration.update(
-            'workbench.editor.customLabels.patterns',
-            {},
-            ConfigurationTarget.Workspace,
-        );
-    }
+    let oldPatterns: { [pattern: string]: string } =
+        await configuration.get('workbench.editor.customLabels.patterns') || {};
 
-    const map: { [key: string]: string } = {};
-    const patterns = state.marks.reduce((map, mark) => {
-        const patternKey = `*/${mark.relativePath}`;
-        map[patternKey] = `${mark.superscriptNumber()} ${path.win32.basename(mark.uri.fsPath)}`;
+    let newPatterns: { [k: string]: string } = {};
+    newPatterns = Object.entries(oldPatterns).reduce((map, [k, v]) => {
+        const patternMatchesMarkFormat = util.isValidMarkFormat([k, v]);
+
+        if (!patternMatchesMarkFormat) {
+            map[k] = v;
+        }
+
         return map;
-    }, map);
+    }, newPatterns);
+
+    state.marks.forEach(mark => {
+        newPatterns[mark.getGlobPattern()] = mark.getLabelContent();
+    });
 
     await configuration.update(
         'workbench.editor.customLabels.patterns',
-        patterns,
+        newPatterns,
         ConfigurationTarget.Workspace,
     );
 }

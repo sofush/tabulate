@@ -2,9 +2,10 @@ import * as vscode from 'vscode';
 import * as core from './core';
 import { State } from './state';
 
+const state = new State();
+
 export async function activate(context: vscode.ExtensionContext) {
-	await core.update();
-	const state = new State();
+	await core.update(state);
 
 	const disps = [
 		vscode.commands.registerCommand('tabulate.toggle', async _ => {
@@ -18,7 +19,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		}),
 		vscode.commands.registerCommand('tabulate.clear', async _ => {
 			state.clear();
-			await core.update();
+			await core.update(state);
 		}),
 		vscode.window.tabGroups.onDidChangeTabGroups(async ev => {
 			await core.update(state);
@@ -29,5 +30,6 @@ export async function activate(context: vscode.ExtensionContext) {
 }
 
 export async function deactivate() {
-	await core.update();
+	state.clear();
+	await core.update(state);
 }
