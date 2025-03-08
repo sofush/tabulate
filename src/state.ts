@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { Mark } from './mark';
-import { normalize, relative } from 'path';
+import { relative } from 'path';
 
 export class State {
     public marks: Mark[];
@@ -19,7 +19,20 @@ export class State {
     }
 
     public toggle(editor: vscode.TextEditor) {
-        let mark: Mark | undefined = this.marks.find(mark => mark.uri === editor.document.uri);
+        let mark: Mark | undefined = this.marks.find(mark => {
+            const lhs = mark.uri.fsPath;
+            const rhs = editor.document.uri.fsPath;
+            const rel = relative(lhs, rhs);
+
+            if (this.dbg !== undefined) {
+                this.dbg.appendLine(`Comparing editor and mark path:`);
+                this.dbg.appendLine(`\tMark path: ${lhs}`);
+                this.dbg.appendLine(`\tEdit path: ${rhs}`);
+                this.dbg.appendLine(`\tRelative path: ${rel}`);
+            }
+
+            return rel === '';
+        });
 
         if (mark === undefined) {
             this.mark(editor);
@@ -85,8 +98,8 @@ export class State {
     private getAssociatedTabs(editor: vscode.TextEditor): vscode.Tab[] {
         return vscode.window.tabGroups.activeTabGroup.tabs.filter(tab => {
             if (tab.input instanceof vscode.TabInputText) {
-                const lhs = normalize(tab.input.uri.fsPath);
-                const rhs = normalize(editor.document.fileName);
+                const lhs = tab.input.uri.fsPath;
+                const rhs = editor.document.fileName;
                 return relative(lhs, rhs);
             }
         });
