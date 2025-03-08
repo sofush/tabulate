@@ -1,12 +1,17 @@
 {
   "name": "tabulate",
-  "displayName": "tabulate",
-  "description": "tabulate",
-  "version": "1.0.0",
+  "displayName": "Tabulate",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sofush/tabulate"
+  },
+  "description": "Jump between tabs easily by marking them",
+  "version": "1.1.0",
   "engines": {
     "vscode": "^1.97.0"
   },
   "categories": [
+    "Keymaps",
     "Other"
   ],
   "activationEvents": [
