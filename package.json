@@ -24,10 +24,24 @@
         "title": "Navigate to a marked text editor"
       },
       {
+        "command": "tabulate.renumber",
+        "title": "Renumber all marks"
+      },
+      {
         "command": "tabulate.clear",
         "title": "Clear all marks"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Tabulate",
+      "properties": {
+        "tabulate.renumberAutomatically": {
+          "type": "boolean",
+          "default": false,
+          "description": "Renumbers marked tabs automatically after unmarking"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

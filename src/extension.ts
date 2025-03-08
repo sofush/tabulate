@@ -12,6 +12,10 @@ export async function activate(context: vscode.ExtensionContext) {
 			await core.toggle(state);
 			await core.update(state);
 		}),
+		vscode.commands.registerCommand('tabulate.renumber', async _ => {
+			state.renumber();
+			await core.update(state);
+		}),
 		vscode.commands.registerCommand('tabulate.navigate', async num => {
 			if (typeof num === 'number') {
 				await core.navigate(state, num);

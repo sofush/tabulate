@@ -83,8 +83,21 @@ export class State {
 
             return keep;
         });
+
+        const workbenchConfig = vscode.workspace.getConfiguration('tabulate');
+        const shouldRenumber = workbenchConfig.get('renumberAutomatically');
+
+        if (shouldRenumber) {
+            this.renumber();
+        }
     }
 
+    public renumber() {
+        this.sortMarks();
+
+        let n = 0;
+        this.marks.forEach(mark => mark.num = ++n);
+    }
 
     public clear() {
         this.marks = [];
