@@ -44,17 +44,9 @@ export class State {
     }
 
     public mark(editor: vscode.TextEditor) {
+        if (!this.checkEditor(editor)) { return; }
+
         this.dbg?.appendLine(`Marking file ${editor.document.uri.fsPath}`);
-
-        if (editor.document.isUntitled) {
-            this.dbg?.appendLine('Cannot mark untitled document.');
-            return;
-        }
-
-        if (editor.document.uri.scheme === 'output') {
-            this.dbg?.appendLine('Cannot mark editor with URI scheme "output".');
-            return;
-        }
 
         const tabs = this.getAssociatedTabs(editor);
 
@@ -80,6 +72,8 @@ export class State {
     }
 
     public unmark(editor: vscode.TextEditor) {
+        if (!this.checkEditor(editor)) { return; }
+
         this.marks = this.marks.filter(mark => {
             const keep = mark.uri !== editor.document.uri;
 
@@ -91,8 +85,23 @@ export class State {
         });
     }
 
+
     public clear() {
         this.marks = [];
+    }
+
+    private checkEditor(editor: vscode.TextEditor): boolean {
+        if (editor.document.isUntitled) {
+            this.dbg?.appendLine('Cannot mark untitled document.');
+            return false;
+        }
+
+        if (editor.document.uri.scheme === 'output') {
+            this.dbg?.appendLine('Cannot mark editor with URI scheme "output".');
+            return false;
+        }
+
+        return true;
     }
 
     private getAssociatedTabs(editor: vscode.TextEditor): vscode.Tab[] {
