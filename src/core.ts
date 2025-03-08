@@ -24,9 +24,13 @@ export async function update(state: State) {
         newPatterns[mark.getGlobPattern()] = mark.getLabelContent();
     });
 
+    const value = Object.entries(newPatterns).length === 0
+        ? undefined
+        : newPatterns;
+
     await configuration.update(
         'workbench.editor.customLabels.patterns',
-        newPatterns,
+        value,
         ConfigurationTarget.Workspace,
     );
 }
