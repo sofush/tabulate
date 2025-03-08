@@ -34,39 +34,7 @@ export class Mark {
         while (n > 0) {
             const digit = n % 10;
             n = Math.floor(n / 10);
-
-            switch (digit) {
-                case 0:
-                    out = '⁰' + out;
-                    break;
-                case 1:
-                    out = '¹' + out;
-                    break;
-                case 2:
-                    out = '²' + out;
-                    break;
-                case 3:
-                    out = '³' + out;
-                    break;
-                case 4:
-                    out = '⁴' + out;
-                    break;
-                case 5:
-                    out = '⁵' + out;
-                    break;
-                case 6:
-                    out = '⁶' + out;
-                    break;
-                case 7:
-                    out = '⁷' + out;
-                    break;
-                case 8:
-                    out = '⁸' + out;
-                    break;
-                case 9:
-                    out = '⁹' + out;
-                    break;
-            }
+            out = util.digitToSuperscript(digit) + out;
         }
 
         if (this.num < 0) {
