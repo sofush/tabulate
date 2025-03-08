@@ -22,10 +22,8 @@ export class State {
         let mark: Mark | undefined = this.marks.find(mark => mark.uri === editor.document.uri);
 
         if (mark === undefined) {
-            this.dbg?.appendLine(`Marking file ${editor.document.uri.fsPath}`);
             this.mark(editor);
         } else {
-            this.dbg?.appendLine(`Unmarking file ${mark.relativePath}`);
             this.unmark(editor);
         }
 
@@ -33,6 +31,8 @@ export class State {
     }
 
     public mark(editor: vscode.TextEditor) {
+        this.dbg?.appendLine(`Marking file ${editor.document.uri.fsPath}`);
+
         if (editor.document.isUntitled) {
             this.dbg?.appendLine('Cannot mark untitled document.');
             return;
@@ -67,7 +67,15 @@ export class State {
     }
 
     public unmark(editor: vscode.TextEditor) {
-        this.marks = this.marks.filter(mark => mark.uri !== editor.document.uri);
+        this.marks = this.marks.filter(mark => {
+            const keep = mark.uri !== editor.document.uri;
+
+            if (!keep) {
+                this.dbg?.appendLine(`Unmarking file ${mark.relativePath}`);
+            }
+
+            return keep;
+        });
     }
 
     public clear() {
