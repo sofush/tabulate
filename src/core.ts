@@ -58,8 +58,3 @@ export async function navigate(state: State, num: number) {
         vscode.window.showTextDocument(ed.document);
     }
 }
-
-export async function get() {
-    const configuration = workspace.getConfiguration();
-    return await configuration.get('workbench.editor.customLabels') || {};
-}
