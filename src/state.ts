@@ -60,6 +60,10 @@ export class State {
         this.marks = this.marks.filter(mark => mark.uri !== editor.document.uri);
     }
 
+    public clear() {
+        this.marks = [];
+    }
+
     private getAssociatedTabs(editor: vscode.TextEditor): vscode.Tab[] {
         return vscode.window.tabGroups.activeTabGroup.tabs.filter(tab => {
             if (tab.input instanceof vscode.TabInputText) {

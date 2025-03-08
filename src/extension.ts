@@ -16,6 +16,10 @@ export async function activate(context: vscode.ExtensionContext) {
 				await core.navigate(state, num);
 			}
 		}),
+		vscode.commands.registerCommand('tabulate.clear', async _ => {
+			state.clear();
+			await core.update();
+		}),
 		vscode.window.tabGroups.onDidChangeTabGroups(async ev => {
 			await core.update(state);
 		}),
