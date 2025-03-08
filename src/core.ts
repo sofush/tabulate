@@ -17,7 +17,7 @@ export async function update(state?: State | undefined) {
     const map: { [key: string]: string } = {};
     const patterns = state.marks.reduce((map, mark) => {
         const patternKey = `*/${mark.relativePath}`;
-        map[patternKey] = `${mark.superscriptNumber()} ${path.basename(mark.uri.fsPath)}`;
+        map[patternKey] = `${mark.superscriptNumber()} ${path.win32.basename(mark.uri.fsPath)}`;
         return map;
     }, map);
 
