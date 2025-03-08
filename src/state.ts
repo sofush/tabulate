@@ -33,6 +33,16 @@ export class State {
     }
 
     public mark(editor: vscode.TextEditor) {
+        if (editor.document.isUntitled) {
+            this.dbg?.appendLine('Cannot mark untitled document.');
+            return;
+        }
+
+        if (editor.document.uri.scheme === 'output') {
+            this.dbg?.appendLine('Cannot mark editor with URI scheme "output".');
+            return;
+        }
+
         const tabs = this.getAssociatedTabs(editor);
 
         if (tabs.length === 0) {
